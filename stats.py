@@ -2,6 +2,16 @@ import pandas as pd
 import os
 import sys
 
+def list_subdirs(dir: str) -> list:
+    """
+    List all subdirectories of a directory.
+    Parameters:
+        dir (str): Path to the directory.
+    Returns:
+        List[str]: List of subdirectories
+    """
+    return [subdir for subdir in os.listdir(dir) if os.path.isdir(os.path.join(dir, subdir))]
+
 def list_data_files(dir: str, ext: str = "txt") -> list:
     """
     List all files in a directory with a given extension.
@@ -73,11 +83,29 @@ def analyze_condition(dir: str) -> dict:
     }
     return summary
 
+def get_condition_summaries(dir: str) -> str:
+    """
+    Get the summary statistics for each condition.
+    Parameters:
+        dir (str): Directory containing condition directories.
+    Returns:
+        dict: Summary statistics for all conditions.
+    """
+    condition_keys = ["a1", "b1", "a2", "b2"]
+    condition_summaries = []
+
+    conditions = list_subdirs(dir)
+    conditions = sorted(conditions, key = lambda x: condition_keys.index(x))
+    for condition in conditions:
+        summary = analyze_condition(os.path.join(dir, condition))
+        condition_summaries.append(summary)
+
+    return dict(zip(condition_keys, condition_summaries))
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: py stats.py <path-to-directory>")
         sys.exit()
 
-    a1_summary = analyze_condition(sys.argv[1])
-    print("A1 Summary:", a1_summary)
+    summaries = get_condition_summaries(sys.argv[1])
+    print(summaries)

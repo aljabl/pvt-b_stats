@@ -7,7 +7,7 @@ The range of a valid RT is 100 <= x >= 500.
 The PVT-B script has been modified to count RTs < 100ms as commissions.
 
 ## Input
-The program takes a command line argument: the path to a directory. The directory should contain .txt files that have the data for each trial of a given condition.
+The program takes a command line argument: the path to a directory. The directory should contain condition directories. Each condition directory should contain .txt files that have the data for each trial.
 
 The program assumes data files have the following columns: Trial, Error, RT, Average RT, Commissions, and Lapses. The program assumes data files use whitespace as a delimiter.
 
