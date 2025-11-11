@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 import sys
 
@@ -102,6 +103,52 @@ def get_condition_summaries(dir: str) -> str:
 
     return dict(zip(condition_keys, condition_summaries))
 
+def plot_rt_bar(summaries: dict):
+    conditions = list(summaries.keys())
+    mean_rts = [summaries[c]['mean_of_means'] for c in conditions]
+
+    plt.figure(figsize=(6, 4))
+    plt.bar(conditions, mean_rts, color="steelblue")
+    plt.title("Mean Reaction Time by Condition")
+    plt.ylabel("Mean RT (ms)")
+    plt.xlabel("Condition")
+    plt.ylim(0, max(mean_rts) + 50)
+    plt.tight_layout()
+    plt.savefig("mean_rts.png", dpi = 300, bbox_inches = "tight")
+
+def plot_commission_bar(summaries: dict):
+    conditions = list(summaries.keys())
+    mean_commissions = [summaries[c]['mean_commissions'] for c in conditions]
+
+    plt.figure(figsize=(6, 4))
+    plt.bar(conditions, mean_commissions, color="orange")
+    plt.title("Mean Commissions by Condition")
+    plt.ylabel("Mean Count")
+    plt.xlabel("Condition")
+    plt.ylim(0, max(mean_commissions) + 1)
+    plt.tight_layout()
+    plt.savefig("mean_commissions.png", dpi = 300, bbox_inches = "tight")
+
+def plot_lapse_bar(summaries: dict):
+    conditions = list(summaries.keys())
+    mean_lapses = [summaries[c]['mean_lapses'] for c in conditions]
+
+    plt.figure(figsize=(6, 4))
+    plt.bar(conditions, mean_lapses, color="crimson")
+    plt.title("Mean Lapses by Condition")
+    plt.ylabel("Mean Count")
+    plt.xlabel("Condition")
+    plt.ylim(0, max(mean_lapses) + 1)
+    plt.tight_layout()
+    plt.savefig("mean_lapses.png", dpi = 300, bbox_inches = "tight")
+
+def generate_graphs(summaries: dict):
+    plot_rt_bar(summaries)
+    plot_commission_bar(summaries)
+    plot_lapse_bar(summaries)
+
+    ## plot_condition_rt()
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: py stats.py <path-to-directory>")
@@ -109,3 +156,5 @@ if __name__ == "__main__":
 
     summaries = get_condition_summaries(sys.argv[1])
     print(summaries)
+
+    generate_graphs(summaries)
