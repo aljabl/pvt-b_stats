@@ -71,16 +71,15 @@ def analyze_condition(dir: str) -> dict:
         trial_data = read_trial_data(os.path.join(dir, file))
         trial_metrics = calculate_trial_metrics(trial_data)
 
-        trial_means.append(trial_metrics["mean_rt"])
-        trial_commissions.append(trial_metrics["total_commissions"])
-        trial_lapses.append(trial_metrics["total_lapses"])
+        trial_means.append(float(trial_metrics["mean_rt"]))
+        trial_commissions.append(float(trial_metrics["total_commissions"]))
+        trial_lapses.append(float(trial_metrics["total_lapses"]))
 
     summary = {
-        "mean_of_means": float(sum(trial_means) / len(trial_means)) if trial_means else 0,
-        "total_commissions": int(sum(trial_commissions)),
-        "mean_commissions": float(sum(trial_commissions) / len(trial_commissions)) if trial_commissions else 0,
-        "total_lapses": int(sum(trial_lapses)),
-        "mean_lapses": float(sum(trial_lapses) / len(trial_lapses)) if trial_lapses else 0
+        "trial_means": trial_means,
+        "mean_of_means": sum(trial_means) / len(trial_means) if trial_means else 0,
+        "mean_commissions": sum(trial_commissions) / len(trial_commissions) if trial_commissions else 0,
+        "mean_lapses": sum(trial_lapses) / len(trial_lapses) if trial_lapses else 0
     }
     return summary
 
